@@ -5,7 +5,8 @@ const { wrapperControlers } = require("../utils/index");
 const { Contact } = require("../models/contact");
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+   const {_id: owner} = req.user;
+  const result = await Contact.find({owner}.populate("owner", "name email"));
   res.json(result);
 };
 
@@ -19,7 +20,8 @@ const getById = async (req, res) => {
 };
 
 const postNewContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const {_id: owner} = req.user;
+  const result = await Contact.create({...req.body, owner});
   res.status(201).json(result);
 };
 
