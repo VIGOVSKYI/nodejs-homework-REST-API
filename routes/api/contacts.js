@@ -6,23 +6,27 @@ const { schemas } = require("../../models/contact");
 
 const { validateBody } = require("../../utils");
 
+const {authenticate} = require("../../middlewares/index");
+
 const router = express.Router();
 
-router.get("/", controllers.getAllContacts);
+router.get("/", authenticate, controllers.getAllContacts);
 
-router.get("/:contactId", controllers.getById);
+router.get("/:contactId", authenticate, controllers.getById);
 
-router.delete("/:contactId", controllers.deleteContactById);
+router.delete("/:contactId", authenticate, controllers.deleteContactById);
 
-router.post("/", validateBody(schemas.addSchema), controllers.postNewContact);
+router.post("/", authenticate, validateBody(schemas.addSchema), controllers.postNewContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   validateBody(schemas.addSchema),
   controllers.updateContactById
 );
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   validateBody(schemas.updateFavoriteSchema),
   controllers.updateStatusContact
 );
